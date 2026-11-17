@@ -1,0 +1,20 @@
+---
+layout: layouts/base.njk
+title: Werk
+---
+<section class="intro">
+  <h1>{{ site.tagline }}</h1>
+  <p>Een selectie van recent werk.</p>
+</section>
+
+<ul class="grid">
+  {%- for project in collections.projecten %}
+  <li>
+    <a href="{{ project.url | url }}">
+      {% image project.data.cover, project.data.cover_alt, "(min-width: 800px) 33vw, 100vw" %}
+      <span class="titel">{{ project.data.title }}</span>
+      <span class="meta">{{ project.data.jaar }}</span>
+    </a>
+  </li>
+  {%- endfor %}
+</ul>

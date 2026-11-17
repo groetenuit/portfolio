@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{ site.taal }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} · {% endif %}{{ site.naam }}</title>
+  <meta name="description" content="{{ description or site.beschrijving }}">
+  <link rel="canonical" href="{{ page.url | url }}">
+  <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+</head>
+<body>
+  <a class="skip" href="#inhoud">Naar de inhoud</a>
+  <header class="site-header">
+    <a class="logo" href="{{ '/' | url }}">{{ site.naam }}</a>
+    <nav aria-label="Hoofdmenu">
+      <a href="{{ '/' | url }}"{% if page.url == "/" %} aria-current="page"{% endif %}>Werk</a>
+      <a href="{{ '/over/' | url }}"{% if page.url == "/over/" %} aria-current="page"{% endif %}>Over</a>
+      <a href="{{ '/contact/' | url }}"{% if page.url == "/contact/" %} aria-current="page"{% endif %}>Contact</a>
+    </nav>
+  </header>
+
+  <main id="inhoud">
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-footer">
+    <p>© {{ "" | year }} {{ site.naam }}</p>
+  </footer>
+</body>
+</html>
