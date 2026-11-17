@@ -1,6 +1,6 @@
 ---
 layout: layouts/project.njk
-title: Voorbeeldproject één
+title: Dit is een testproject
 jaar: 2026
 rol: Webdesign
 volgorde: 1
