@@ -1,1 +1,109 @@
+media:
+  input: src/img
+  output: /img
+  extensions: [jpg, jpeg, png, webp]
+  rename: safe
 
+content:
+  - name: projecten
+    label: Projecten
+    type: collection
+    path: src/projecten
+    filename: "{primary}.md"
+    fields:
+      - name: layout
+        type: string
+        hidden: true
+        default: layouts/project.njk
+      - name: title
+        label: Titel
+        type: string
+        required: true
+      - name: jaar
+        label: Jaar
+        type: number
+      - name: rol
+        label: Rol
+        type: string
+      - name: volgorde
+        label: Volgorde op de startpagina (laagste eerst)
+        type: number
+      - name: cover
+        label: Omslagfoto
+        type: image
+        required: true
+      - name: cover_alt
+        label: Beschrijving omslagfoto (voor screenreaders)
+        type: string
+        required: true
+      - name: body
+        label: Tekst
+        type: rich-text
+    view:
+      primary: title
+      sort: volgorde
+      order: asc
+
+  - name: site
+    label: Site-instellingen
+    type: file
+    path: src/_data/site.json
+    format: json
+    fields:
+      - name: naam
+        label: Naam
+        type: string
+      - name: tagline
+        label: Tagline
+        type: string
+      - name: beschrijving
+        label: Beschrijving (voor zoekmachines)
+        type: text
+      - name: email
+        label: E-mailadres
+        type: string
+      - name: taal
+        label: Taalcode
+        type: string
+
+  - name: over
+    label: Over
+    type: file
+    path: src/over.md
+    fields:
+      - name: title
+        type: string
+        hidden: true
+        default: Over
+      - name: layout
+        type: string
+        hidden: true
+        default: layouts/base.njk
+      - name: permalink
+        type: string
+        hidden: true
+        default: /over/
+      - name: body
+        label: Tekst
+        type: rich-text
+
+  - name: contact
+    label: Contact
+    type: file
+    path: src/contact.md
+    fields:
+      - name: title
+        type: string
+        hidden: true
+        default: Contact
+      - name: layout
+        type: string
+        hidden: true
+        default: layouts/base.njk
+      - name: permalink
+        type: string
+        hidden: true
+        default: /contact/
+      - name: body
+        label: Tekst
+        type: rich-text
