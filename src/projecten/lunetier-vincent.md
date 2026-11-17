@@ -8,3 +8,7 @@ cover_alt: Vitrine Lunetier Vincent
 ---
 # Gedurfd en gewaagd
 
+Hier komt een volledige projectbeschrijving
+
+![](/img/lunetier-vincent-vitrine.jpg)
+
