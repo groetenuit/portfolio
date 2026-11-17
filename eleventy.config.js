@@ -10,23 +10,33 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy({ "src/static": "/" });
 
-  // Afbeeldingen: automatisch WebP + JPEG in meerdere breedtes
-  // Gebruik in Markdown/Nunjucks: {% image "projecten/foto.jpg", "Beschrijving", "(min-width: 800px) 50vw, 100vw" %}
-  eleventyConfig.addShortcode("image", async function (src, alt, sizes = "100vw") {
+  // Afbeeldingen: automatisch WebP + JPEG in meerdere breedtes.
+  // Werkt met bestandsnamen ("foto.jpg") en met paden zoals Pages CMS ze schrijft ("/img/foto.jpg").
+  const optimaliseer = async (src, alt, sizes = "100vw") => {
     if (!alt) throw new Error(`Alt-tekst ontbreekt voor afbeelding: ${src}`);
-    const input = path.join("src/img", src);
-    const metadata = await Image(input, {
+    const schoon = String(src).replace(/^\/+/, "").replace(/^(src\/)?img\//, "");
+    const metadata = await Image(path.join("src/img", schoon), {
       widths: [400, 800, 1400],
       formats: ["webp", "jpeg"],
       outputDir: "_site/img/",
       urlPath: `${pathPrefix}img/`.replace("//", "/"),
     });
-    return Image.generateHTML(metadata, {
-      alt,
-      sizes,
-      loading: "lazy",
-      decoding: "async",
-    });
+    return Image.generateHTML(metadata, { alt, sizes, loading: "lazy", decoding: "async" });
+  };
+
+  // Gebruik in Markdown/Nunjucks: {% image "projecten/foto.jpg", "Beschrijving", "(min-width: 800px) 50vw, 100vw" %}
+  eleventyConfig.addShortcode("image", optimaliseer);
+
+  // Gewone Markdown-afbeeldingen (zoals de editor van Pages CMS ze invoegt: ![alt](/img/foto.jpg))
+  // worden na het renderen vervangen door de geoptimaliseerde versie.
+  eleventyConfig.addTransform("markdown-afbeeldingen", async function (content) {
+    if (!this.page.outputPath?.endsWith(".html")) return content;
+    const regex = /<img src="(\/img\/[^"]+)" alt="([^"]*)"\s*\/?>/g;
+    const treffers = [...content.matchAll(regex)];
+    for (const [volledig, src, alt] of treffers) {
+      content = content.replace(volledig, await optimaliseer(src, alt));
+    }
+    return content;
   });
 
   eleventyConfig.addFilter("year", () => new Date().getFullYear());
